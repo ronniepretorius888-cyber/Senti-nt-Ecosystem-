@@ -1,0 +1,2 @@
+const VAULT_KEY = 'HOPE_v15_SOVEREIGN';
+

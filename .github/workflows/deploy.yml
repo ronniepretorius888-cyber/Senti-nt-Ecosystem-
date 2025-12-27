@@ -1,0 +1,28 @@
+name: Secure Deploy to Pages
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Inject Secrets (Safe Swap)
+        run: |
+          # Replaces PAYFAST_ID_PLACEHOLDER with the real secret
+          sed -i "s/PAYFAST_ID_PLACEHOLDER/${{ secrets.PAYFAST_MERCHANT_ID }}/g" index.html
+          
+          # Replaces GATE_KEY_PLACEHOLDER with the real secret
+          sed -i "s/GATE_KEY_PLACEHOLDER/${{ secrets.GATE_KEY }}/g" index.html
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: . 
+
